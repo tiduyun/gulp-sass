@@ -163,6 +163,17 @@ gulpSass.logError = function logError(error) {
 //////////////////////////////
 // Store compiler in a prop
 //////////////////////////////
-gulpSass.compiler = require('node-sass');
+gulpSass.compiler = ['node-sass', 'sass'].reduce((p, n, i, arr) => {
+  if (p) {
+    return p
+  }
+  try {
+    return require(n)
+  } catch(e) {
+    if (i === arr.length - 1) {
+      throw new Error('Both `node-sass` and `sass` are unavailable.')
+    }
+  }
+}, null)
 
 module.exports = gulpSass;
